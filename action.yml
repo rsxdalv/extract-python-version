@@ -1,4 +1,3 @@
-# action.yml
 name: 'Extract Python Package Version'
 description: 'Extract version from setup.py, pyproject.toml, or __init__.py files'
 branding:
@@ -18,19 +17,25 @@ inputs:
 outputs:
   version:
     description: 'The extracted version number'
+    value: ${{ steps.extract.outputs.version }}
   tag:
     description: 'The version with v prefix (e.g., v1.2.3)'
+    value: ${{ steps.extract.outputs.tag }}
   major:
     description: 'Major version number'
+    value: ${{ steps.extract.outputs.major }}
   minor:
     description: 'Minor version number'
+    value: ${{ steps.extract.outputs.minor }}
   patch:
     description: 'Patch version number'
+    value: ${{ steps.extract.outputs.patch }}
 
 runs:
   using: 'composite'
   steps:
     - name: Extract version
+      id: extract
       shell: bash
       run: |
         python3 ${{ github.action_path }}/extract_version.py \
