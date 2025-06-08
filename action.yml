@@ -1,0 +1,39 @@
+# action.yml
+name: 'Extract Python Package Version'
+description: 'Extract version from setup.py, pyproject.toml, or __init__.py files'
+branding:
+  icon: 'package'
+  color: 'blue'
+
+inputs:
+  file-path:
+    description: 'Path to the file containing version (setup.py, pyproject.toml, __init__.py)'
+    required: false
+    default: 'auto'
+  fallback-version:
+    description: 'Fallback version if no version is found'
+    required: false
+    default: '0.0.0'
+
+outputs:
+  version:
+    description: 'The extracted version number'
+  tag:
+    description: 'The version with v prefix (e.g., v1.2.3)'
+  major:
+    description: 'Major version number'
+  minor:
+    description: 'Minor version number'
+  patch:
+    description: 'Patch version number'
+
+runs:
+  using: 'composite'
+  steps:
+    - name: Extract version
+      shell: bash
+      run: |
+        python3 ${{ github.action_path }}/extract_version.py \
+          --file-path "${{ inputs.file-path }}" \
+          --fallback-version "${{ inputs.fallback-version }}" \
+          --output-file "$GITHUB_OUTPUT"
